@@ -1,5 +1,5 @@
 # openweb-ui-setup
-Notes, scripts, and config files from getting 
+Notes, scripts, and config files from a night spent getting 
  [open-webui](https://github.com/open-webui/open-webui) 
  configured properly
 
