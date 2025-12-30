@@ -1,0 +1,14 @@
+[Unit]
+Description=Tika Service
+After=network-online.target
+
+[Service]
+ExecStart=/usr/bin/java -jar /opt/tika/tika-server-standard.jar --host=0.0.0.0 --port 9997 -c /opt/tika/tika-config.xml 
+User=ollama
+Group=ai
+Restart=always
+RestartSec=3
+Environment=PATH="/opt/tika:$PATH" JAVA_HOME="/usr/lib/jvm/java-21-openjdk" JRE_HOME="/usr/lib/jvm/jre" CLASSPATH="/opt/tika:$JAVA_HOME/lib:$JRE_HOME/lib"
+
+[Install]
+WantedBy=multi-user.target

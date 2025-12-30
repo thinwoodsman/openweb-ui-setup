@@ -1,0 +1,653 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<properties>
+  <!--for example: <mimeTypeRepository resource="/org/apache/tika/mime/tika-mimetypes.xml"/>-->
+  <service-loader dynamic="true" loadErrorHandler="IGNORE"/>
+  <server>
+    <port>9997</port>
+    <host>localhost</host>
+    <javaPath>/usr/bin/java</javaPath>
+    <enableUnsecureFeatures>true</enableUnsecureFeatures>
+  </server>
+  <encodingDetectors>
+    <encodingDetector class="org.apache.tika.parser.html.HtmlEncodingDetector">
+      <params>
+        <param name="markLimit" type="int">8192</param>
+      </params>
+    </encodingDetector>
+    <encodingDetector class="org.apache.tika.parser.txt.UniversalEncodingDetector">
+      <params>
+        <param name="markLimit" type="int">16384</param>
+      </params>
+    </encodingDetector>
+    <encodingDetector class="org.apache.tika.parser.txt.Icu4jEncodingDetector">
+      <params>
+        <param name="ignoreCharsets" type="list"/>
+        <param name="markLimit" type="int">12000</param>
+        <param name="stripMarkup" type="bool">false</param>
+      </params>
+    </encodingDetector>
+  </encodingDetectors>
+  <fetchers>
+    <fetcher class="org.apache.tika.pipes.fetcher.EmptyFetcher"/>
+    <fetcher class="org.apache.tika.pipes.fetcher.fs.FileSystemFetcher"/>
+    <fetcher class="org.apache.tika.pipes.fetcher.url.UrlFetcher"/>
+  </fetchers>
+  <!--No translators available-->
+  <detectors>
+    <detector class="org.gagravarr.tika.OggDetector"/>
+    <detector class="org.apache.tika.detect.apple.BPListDetector"/>
+    <detector class="org.apache.tika.detect.gzip.GZipSpecializationDetector"/>
+    <detector class="org.apache.tika.detect.microsoft.POIFSContainerDetector"/>
+    <detector class="org.apache.tika.detect.ole.MiscOLEDetector"/>
+    <detector class="org.apache.tika.detect.zip.DefaultZipContainerDetector">
+      <params>
+        <param name="markLimit" type="int">16777216</param>
+      </params>
+    </detector>
+    <detector class="org.apache.tika.mime.MimeTypes"/>
+  </detectors>
+  <parsers>
+    <parser class="org.apache.tika.parser.xml.FictionBookParser">
+      <mime>application/x-fictionbook+xml</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.xml.DcXMLParser">
+      <mime>application/xml</mime>
+      <mime>image/svg+xml</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.xliff.XLZParser">
+      <mime>application/x-xliff+zip</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.xliff.XLIFF12Parser">
+      <mime>application/x-xliff+xml</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.wordperfect.WordPerfectParser">
+      <params>
+        <param name="includeDeletedContent" type="bool">true</param>
+      </params>
+      <mime>application/vnd.wordperfect; version=5.0</mime>
+      <mime>application/vnd.wordperfect; version=5.1</mime>
+      <mime>application/vnd.wordperfect; version=6.x</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.wordperfect.QuattroProParser">
+      <mime>application/x-quattro-pro; version=9</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.warc.WARCParser">
+      <mime>application/arc+gz</mime>
+      <mime>application/warc</mime>
+      <mime>application/warc+gz</mime>
+      <mime>application/x-internet-archive</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.wacz.WACZParser">
+      <mime>application/x-wacz</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.video.FLVParser">
+      <mime>video/x-flv</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.tmx.TMXParser">
+      <mime>application/x-tmx</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.sas.SAS7BDATParser">
+      <mime>application/x-sas-data</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.prt.PRTParser">
+      <mime>application/x-prt</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.pkg.RarParser">
+      <mime>application/x-rar-compressed</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.pkg.PackageParser">
+      <params>
+        <param name="detectCharsetsInEntryNames" type="bool">true</param>
+      </params>
+      <mime>application/java-archive</mime>
+      <mime>application/x-7z-compressed</mime>
+      <mime>application/x-archive</mime>
+      <mime>application/x-arj</mime>
+      <mime>application/x-cpio</mime>
+      <mime>application/x-tar</mime>
+      <mime>application/x-tika-unix-dump</mime>
+      <mime>application/zip</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.pkg.CompressorParser">
+      <params>
+        <param name="decompressConcatenated" type="bool">false</param>
+        <param name="memoryLimitInKb" type="int">100000</param>
+      </params>
+      <mime>application/deflate64</mime>
+      <mime>application/gzip</mime>
+      <mime>application/x-brotli</mime>
+      <mime>application/x-bzip</mime>
+      <mime>application/x-bzip2</mime>
+      <mime>application/x-compress</mime>
+      <mime>application/x-gzip</mime>
+      <mime>application/x-java-pack200</mime>
+      <mime>application/x-lz4</mime>
+      <mime>application/x-lzma</mime>
+      <mime>application/x-snappy</mime>
+      <mime>application/x-xz</mime>
+      <mime>application/zlib</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.pdf.PDFParser">
+      <params>
+        <param name="allowExtractionForAccessibility" type="bool">true</param>
+        <param name="averageCharTolerance" type="float">0.3</param>
+        <param name="catchIntermediateExceptions" type="bool">true</param>
+        <param name="detectAngles" type="bool">false</param>
+        <param name="dropThreshold" type="float">2.5</param>
+        <param name="enableAutoSpace" type="bool">true</param>
+        <param name="extractAcroFormContent" type="bool">true</param>
+        <param name="extractActions" type="bool">false</param>
+        <param name="extractAnnotationText" type="bool">true</param>
+        <param name="extractBookmarksText" type="bool">false</param>
+        <param name="extractFontNames" type="bool">false</param>
+        <param name="extractIncrementalUpdateInfo" type="bool">false</param>
+        <param name="extractInlineImageMetadataOnly" type="bool">false</param>
+        <param name="extractInlineImages" type="bool">false</param>
+        <param name="extractMarkedContent" type="bool">false</param>
+        <param name="extractUniqueInlineImagesOnly" type="bool">true</param>
+        <param name="ifXFAExtractOnlyXFA" type="bool">false</param>
+        <param name="ignoreContentStreamSpaceGlyphs" type="bool">false</param>
+        <param name="imageStrategy" type="string">NONE</param>
+        <param name="maxIncrementalUpdates" type="int">10</param>
+        <param name="maxMainMemoryBytes" type="long">536870912</param>
+        <param name="ocrDPI" type="int">300</param>
+        <param name="ocrImageFormatName" type="string">png</param>
+        <param name="ocrImageQuality" type="float">1.0</param>
+        <param name="ocrImageType" type="string">GRAY</param>
+        <param name="ocrRenderingStrategy" type="string">ALL</param>
+        <param name="ocrStrategy" type="string">AUTO</param>
+        <param name="ocrStrategyAuto" type="string">10,10</param>
+        <param name="parseIncrementalUpdates" type="bool">false</param>
+        <param name="setKCMS" type="bool">false</param>
+        <param name="sortByPosition" type="bool">false</param>
+        <param name="spacingTolerance" type="float">0.5</param>
+        <param name="suppressDuplicateOverlappingText" type="bool">false</param>
+        <param name="throwOnEncryptedPayload" type="bool">false</param>
+      </params>
+      <imageGraphicsEngineFactory class="org.apache.tika.parser.pdf.image.ImageGraphicsEngineFactory"/>
+      <mime>application/pdf</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.odf.OpenDocumentParser">
+      <params>
+        <param name="extractMacros" type="bool">false</param>
+      </params>
+      <mime>application/vnd.oasis.opendocument.chart</mime>
+      <mime>application/vnd.oasis.opendocument.chart-template</mime>
+      <mime>application/vnd.oasis.opendocument.formula</mime>
+      <mime>application/vnd.oasis.opendocument.formula-template</mime>
+      <mime>application/vnd.oasis.opendocument.graphics</mime>
+      <mime>application/vnd.oasis.opendocument.graphics-template</mime>
+      <mime>application/vnd.oasis.opendocument.image</mime>
+      <mime>application/vnd.oasis.opendocument.image-template</mime>
+      <mime>application/vnd.oasis.opendocument.presentation</mime>
+      <mime>application/vnd.oasis.opendocument.presentation-template</mime>
+      <mime>application/vnd.oasis.opendocument.spreadsheet</mime>
+      <mime>application/vnd.oasis.opendocument.spreadsheet-template</mime>
+      <mime>application/vnd.oasis.opendocument.text</mime>
+      <mime>application/vnd.oasis.opendocument.text-master</mime>
+      <mime>application/vnd.oasis.opendocument.text-template</mime>
+      <mime>application/vnd.oasis.opendocument.text-web</mime>
+      <mime>application/vnd.sun.xml.writer</mime>
+      <mime>application/x-vnd.oasis.opendocument.chart</mime>
+      <mime>application/x-vnd.oasis.opendocument.chart-template</mime>
+      <mime>application/x-vnd.oasis.opendocument.formula</mime>
+      <mime>application/x-vnd.oasis.opendocument.formula-template</mime>
+      <mime>application/x-vnd.oasis.opendocument.graphics</mime>
+      <mime>application/x-vnd.oasis.opendocument.graphics-template</mime>
+      <mime>application/x-vnd.oasis.opendocument.image</mime>
+      <mime>application/x-vnd.oasis.opendocument.image-template</mime>
+      <mime>application/x-vnd.oasis.opendocument.presentation</mime>
+      <mime>application/x-vnd.oasis.opendocument.presentation-template</mime>
+      <mime>application/x-vnd.oasis.opendocument.spreadsheet</mime>
+      <mime>application/x-vnd.oasis.opendocument.spreadsheet-template</mime>
+      <mime>application/x-vnd.oasis.opendocument.text</mime>
+      <mime>application/x-vnd.oasis.opendocument.text-master</mime>
+      <mime>application/x-vnd.oasis.opendocument.text-template</mime>
+      <mime>application/x-vnd.oasis.opendocument.text-web</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.odf.FlatOpenDocumentParser">
+      <params>
+        <param name="extractMacros" type="bool">false</param>
+      </params>
+      <mime>application/vnd.oasis.opendocument.flat.presentation</mime>
+      <mime>application/vnd.oasis.opendocument.flat.spreadsheet</mime>
+      <mime>application/vnd.oasis.opendocument.flat.text</mime>
+      <mime>application/vnd.oasis.opendocument.tika.flat.document</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.ocr.TesseractOCRParser">
+      <params>
+        <param name="applyRotation" type="bool">false</param>
+        <param name="colorspace" type="string">gray</param>
+        <param name="density" type="int">300</param>
+        <param name="depth" type="int">4</param>
+        <param name="enableImagePreprocessing" type="bool">true</param>
+        <param name="filter" type="string">triangle</param>
+        <param name="imageMagickPath" type="string"/>
+        <param name="inlineContent" type="bool">false</param>
+        <param name="language" type="string">eng</param>
+        <param name="maxFileSizeToOcr" type="long">2147483647</param>
+        <param name="minFileSizeToOcr" type="long">0</param>
+        <param name="otherTesseractSettings" type="list"/>
+        <param name="outputType" type="string">txt</param>
+        <param name="pageSegMode" type="string">1</param>
+        <param name="preloadLangs" type="bool">false</param>
+        <param name="preserveInterwordSpacing" type="bool">false</param>
+        <param name="resize" type="int">200</param>
+        <param name="skipOCR" type="bool">false</param>
+        <param name="tessdataPath" type="string"/>
+        <param name="tesseractPath" type="string"/>
+        <param name="timeout" type="int">120</param>
+      </params>
+      <mime>image/jp2</mime>
+      <mime>image/jpx</mime>
+      <mime>image/ocr-bmp</mime>
+      <mime>image/ocr-gif</mime>
+      <mime>image/ocr-jp2</mime>
+      <mime>image/ocr-jpeg</mime>
+      <mime>image/ocr-jpx</mime>
+      <mime>image/ocr-png</mime>
+      <mime>image/ocr-tiff</mime>
+      <mime>image/ocr-x-portable-pixmap</mime>
+      <mime>image/x-portable-pixmap</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.mp4.MP4Parser">
+      <mime>application/mp4</mime>
+      <mime>audio/mp4</mime>
+      <mime>video/3gpp</mime>
+      <mime>video/3gpp2</mime>
+      <mime>video/mp4</mime>
+      <mime>video/quicktime</mime>
+      <mime>video/x-m4v</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.mp3.Mp3Parser">
+      <params>
+        <param name="maxRecordSize" type="int">50000000</param>
+      </params>
+      <mime>audio/mpeg</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.mif.MIFParser">
+      <mime>application/vnd.mif</mime>
+      <mime>application/x-maker</mime>
+      <mime>application/x-mif</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.microsoft.xml.WordMLParser">
+      <mime>application/vnd.ms-wordml</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.microsoft.xml.SpreadsheetMLParser">
+      <mime>application/vnd.ms-spreadsheetml</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.microsoft.rtf.RTFParser">
+      <params>
+        <param name="memoryLimitInKb" type="int">20480</param>
+      </params>
+      <mime>application/rtf</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.microsoft.pst.PSTMailItemParser">
+      <mime>application/x-tika-pst-mail-item</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.microsoft.pst.OutlookPSTParser">
+      <mime>application/vnd.ms-outlook-pst</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.microsoft.ooxml.xwpf.ml2006.Word2006MLParser">
+      <params>
+        <param name="byteArrayMaxOverride" type="int">0</param>
+        <param name="concatenatePhoneticRuns" type="bool">true</param>
+        <param name="dateFormatOverride" type="string"/>
+        <param name="extractAllAlternativesFromMSG" type="bool">false</param>
+        <param name="extractMacros" type="bool">false</param>
+        <param name="includeDeletedContent" type="bool">false</param>
+        <param name="includeHeadersAndFooters" type="bool">true</param>
+        <param name="includeMoveFromContent" type="bool">false</param>
+        <param name="includeShapeBasedContent" type="bool">true</param>
+        <param name="useSAXDocxExtractor" type="bool">false</param>
+        <param name="useSAXPptxExtractor" type="bool">false</param>
+        <param name="writeSelectHeadersInBody" type="bool">true</param>
+      </params>
+      <mime>application/vnd.ms-word2006ml</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.microsoft.ooxml.OOXMLParser">
+      <params>
+        <param name="byteArrayMaxOverride" type="int">0</param>
+        <param name="concatenatePhoneticRuns" type="bool">true</param>
+        <param name="dateFormatOverride" type="string"/>
+        <param name="extractAllAlternativesFromMSG" type="bool">false</param>
+        <param name="extractMacros" type="bool">false</param>
+        <param name="includeDeletedContent" type="bool">false</param>
+        <param name="includeHeadersAndFooters" type="bool">true</param>
+        <param name="includeMoveFromContent" type="bool">false</param>
+        <param name="includeShapeBasedContent" type="bool">true</param>
+        <param name="useSAXDocxExtractor" type="bool">false</param>
+        <param name="useSAXPptxExtractor" type="bool">false</param>
+        <param name="writeSelectHeadersInBody" type="bool">true</param>
+      </params>
+      <mime>application/vnd.ms-excel.addin.macroenabled.12</mime>
+      <mime>application/vnd.ms-excel.sheet.binary.macroenabled.12</mime>
+      <mime>application/vnd.ms-excel.sheet.macroenabled.12</mime>
+      <mime>application/vnd.ms-excel.template.macroenabled.12</mime>
+      <mime>application/vnd.ms-powerpoint.addin.macroenabled.12</mime>
+      <mime>application/vnd.ms-powerpoint.presentation.macroenabled.12</mime>
+      <mime>application/vnd.ms-powerpoint.slide.macroenabled.12</mime>
+      <mime>application/vnd.ms-powerpoint.slideshow.macroenabled.12</mime>
+      <mime>application/vnd.ms-powerpoint.template.macroenabled.12</mime>
+      <mime>application/vnd.ms-visio.drawing</mime>
+      <mime>application/vnd.ms-visio.drawing.macroenabled.12</mime>
+      <mime>application/vnd.ms-visio.stencil</mime>
+      <mime>application/vnd.ms-visio.stencil.macroenabled.12</mime>
+      <mime>application/vnd.ms-visio.template</mime>
+      <mime>application/vnd.ms-visio.template.macroenabled.12</mime>
+      <mime>application/vnd.ms-word.document.macroenabled.12</mime>
+      <mime>application/vnd.ms-word.template.macroenabled.12</mime>
+      <mime>application/vnd.ms-xpsdocument</mime>
+      <mime>application/vnd.openxmlformats-officedocument.presentationml.presentation</mime>
+      <mime>application/vnd.openxmlformats-officedocument.presentationml.slide</mime>
+      <mime>application/vnd.openxmlformats-officedocument.presentationml.slideshow</mime>
+      <mime>application/vnd.openxmlformats-officedocument.presentationml.template</mime>
+      <mime>application/vnd.openxmlformats-officedocument.spreadsheetml.sheet</mime>
+      <mime>application/vnd.openxmlformats-officedocument.spreadsheetml.template</mime>
+      <mime>application/vnd.openxmlformats-officedocument.wordprocessingml.document</mime>
+      <mime>application/vnd.openxmlformats-officedocument.wordprocessingml.template</mime>
+      <mime>model/vnd.dwfx+xps</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.microsoft.onenote.OneNoteParser">
+      <mime>application/onenote; format=one</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.microsoft.chm.ChmParser">
+      <mime>application/chm</mime>
+      <mime>application/vnd.ms-htmlhelp</mime>
+      <mime>application/x-chm</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.microsoft.activemime.ActiveMimeParser">
+      <mime>application/x-activemime</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.microsoft.WMFParser">
+      <mime>image/wmf</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.microsoft.TNEFParser">
+      <mime>application/ms-tnef</mime>
+      <mime>application/vnd.ms-tnef</mime>
+      <mime>application/x-tnef</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.microsoft.OldExcelParser">
+      <mime>application/vnd.ms-excel.sheet.2</mime>
+      <mime>application/vnd.ms-excel.sheet.3</mime>
+      <mime>application/vnd.ms-excel.sheet.4</mime>
+      <mime>application/vnd.ms-excel.workspace.3</mime>
+      <mime>application/vnd.ms-excel.workspace.4</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.microsoft.OfficeParser">
+      <params>
+        <param name="byteArrayMaxOverride" type="int">0</param>
+        <param name="concatenatePhoneticRuns" type="bool">true</param>
+	<param name="dateFormatOverride" type="string">yyyy-mm-dd</param>
+        <param name="extractAllAlternativesFromMSG" type="bool">false</param>
+        <param name="extractMacros" type="bool">false</param>
+        <param name="includeDeletedContent" type="bool">false</param>
+        <param name="includeHeadersAndFooters" type="bool">true</param>
+        <param name="includeMoveFromContent" type="bool">false</param>
+        <param name="includeShapeBasedContent" type="bool">true</param>
+        <param name="useSAXDocxExtractor" type="bool">false</param>
+        <param name="useSAXPptxExtractor" type="bool">false</param>
+        <param name="writeSelectHeadersInBody" type="bool">true</param>
+      </params>
+      <mime>application/msword</mime>
+      <mime>application/sldworks</mime>
+      <mime>application/vnd.ms-excel</mime>
+      <mime>application/vnd.ms-outlook</mime>
+      <mime>application/vnd.ms-powerpoint</mime>
+      <mime>application/vnd.ms-project</mime>
+      <mime>application/vnd.visio</mime>
+      <mime>application/x-mspublisher</mime>
+      <mime>application/x-tika-msoffice</mime>
+      <mime>application/x-tika-msoffice-embedded; format=ole10_native</mime>
+      <mime>application/x-tika-msworks-spreadsheet</mime>
+      <mime>application/x-tika-ole-drm-encrypted</mime>
+      <mime>application/x-tika-ooxml-protected</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.microsoft.MSOwnerFileParser">
+      <mime>application/x-ms-owner</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.microsoft.JackcessParser">
+      <mime>application/x-msaccess</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.microsoft.EMFParser">
+      <mime>image/emf</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.mbox.MboxParser">
+      <mime>application/mbox</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.mat.MatParser">
+      <mime>application/x-matlab-data</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.mail.RFC822Parser">
+      <mime>message/rfc822</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.iwork.iwana.IWork18PackageParser">
+      <mime>application/vnd.apple.keynote.18</mime>
+      <mime>application/vnd.apple.numbers.18</mime>
+      <mime>application/vnd.apple.pages.18</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.iwork.iwana.IWork13PackageParser">
+      <mime>application/vnd.apple.keynote.13</mime>
+      <mime>application/vnd.apple.numbers.13</mime>
+      <mime>application/vnd.apple.pages.13</mime>
+      <mime>application/vnd.apple.unknown.13</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.iwork.IWorkPackageParser">
+      <mime>application/vnd.apple.iwork</mime>
+      <mime>application/vnd.apple.keynote</mime>
+      <mime>application/vnd.apple.numbers</mime>
+      <mime>application/vnd.apple.pages</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.iptc.IptcAnpaParser">
+      <mime>text/vnd.iptc.anpa</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.indesign.IDMLParser">
+      <mime>application/vnd.adobe.indesign-idml-package</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.image.WebPParser">
+      <mime>image/webp</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.image.TiffParser">
+      <mime>image/tiff</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.image.PSDParser">
+      <params>
+        <param name="maxDataLengthBytes" type="int">10000000</param>
+      </params>
+      <mime>image/vnd.adobe.photoshop</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.image.JpegParser">
+      <mime>image/jpeg</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.image.JXLParser">
+      <mime>image/jxl</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.image.ImageParser">
+      <mime>image/bmp</mime>
+      <mime>image/gif</mime>
+      <mime>image/png</mime>
+      <mime>image/vnd.wap.wbmp</mime>
+      <mime>image/x-icon</mime>
+      <mime>image/x-jbig2</mime>
+      <mime>image/x-ms-bmp</mime>
+      <mime>image/x-xcf</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.image.ICNSParser">
+      <mime>image/icns</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.image.HeifParser">
+      <mime>image/heic</mime>
+      <mime>image/heic-sequence</mime>
+      <mime>image/heif</mime>
+      <mime>image/heif-sequence</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.image.BPGParser">
+      <params>
+        <param name="maxRecordLength" type="int">52428800</param>
+      </params>
+      <mime>image/bpg</mime>
+      <mime>image/x-bpg</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.hwp.HwpV5Parser">
+      <mime>application/x-hwp-v5</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.http.HttpParser">
+      <mime>application/x-httpresponse</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.html.JSoupParser">
+      <params>
+        <param name="extractScripts" type="bool">false</param>
+      </params>
+      <mime>application/vnd.wap.xhtml+xml</mime>
+      <mime>application/x-asp</mime>
+      <mime>application/xhtml+xml</mime>
+      <mime>text/html</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.html.HtmlParser">
+      <params>
+        <param name="extractScripts" type="bool">false</param>
+      </params>
+    </parser>
+    <parser class="org.apache.tika.parser.font.TrueTypeParser">
+      <mime>application/x-font-ttf</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.font.AdobeFontMetricParser">
+      <mime>application/x-font-adobe-metric</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.feed.FeedParser">
+      <mime>application/atom+xml</mime>
+      <mime>application/rss+xml</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.external.CompositeExternalParser">
+      <mime>video/avi</mime>
+      <mime>video/mpeg</mime>
+      <mime>video/x-msvideo</mime>
+      <parser class="org.apache.tika.parser.external.ExternalParser">
+        <mime>video/avi</mime>
+        <mime>video/mpeg</mime>
+        <mime>video/x-msvideo</mime>
+      </parser>
+    </parser>
+    <parser class="org.apache.tika.parser.executable.UniversalExecutableParser">
+      <mime>application/x-mach-o-universal</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.executable.ExecutableParser">
+      <mime>application/x-coredump</mime>
+      <mime>application/x-elf</mime>
+      <mime>application/x-executable</mime>
+      <mime>application/x-mach-o</mime>
+      <mime>application/x-mach-o-bundle</mime>
+      <mime>application/x-mach-o-core</mime>
+      <mime>application/x-mach-o-dsym</mime>
+      <mime>application/x-mach-o-dylib</mime>
+      <mime>application/x-mach-o-dylib-stub</mime>
+      <mime>application/x-mach-o-dylinker</mime>
+      <mime>application/x-mach-o-executable</mime>
+      <mime>application/x-mach-o-fvmlib</mime>
+      <mime>application/x-mach-o-kext-bundle</mime>
+      <mime>application/x-mach-o-object</mime>
+      <mime>application/x-mach-o-preload</mime>
+      <mime>application/x-msdownload</mime>
+      <mime>application/x-object</mime>
+      <mime>application/x-sharedlib</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.epub.EpubParser">
+      <mime>application/epub+zip</mime>
+      <mime>application/x-ibooks+zip</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.dwg.DWGParser">
+      <params>
+        <param name="cleanDwgReadOutput" type="bool">true</param>
+        <param name="cleanDwgReadOutputBatchSize" type="int">10000000</param>
+        <param name="cleanDwgReadRegexToReplace" type="string">[^\x20-\x7e]</param>
+        <param name="cleanDwgReadReplaceWith" type="string"/>
+        <param name="dwgReadExecutable" type="string"/>
+        <param name="dwgReadTimeout" type="long">300000</param>
+      </params>
+      <mime>image/vnd.dwg</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.dif.DIFParser">
+      <mime>application/dif+xml</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.dgn.DGN8Parser">
+      <mime>image/vnd.dgn; version=8</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.dbf.DBFParser">
+      <mime>application/x-dbf</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.csv.TextAndCSVParser">
+      <mime>text/csv</mime>
+      <mime>text/plain</mime>
+      <mime>text/tsv</mime>
+      <params>
+        <param name="minConfidence" type="double">0.5</param>
+      </params>
+    </parser>
+    <parser class="org.apache.tika.parser.crypto.TSDParser">
+      <mime>application/timestamped-data</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.crypto.Pkcs7Parser">
+      <mime>application/pkcs7-mime</mime>
+      <mime>application/pkcs7-signature</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.code.SourceCodeParser">
+      <mime>text/x-c++src</mime>
+      <mime>text/x-groovy</mime>
+      <mime>text/x-java-source</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.audio.MidiParser">
+      <mime>application/x-midi</mime>
+      <mime>audio/midi</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.audio.AudioParser">
+      <mime>audio/basic</mime>
+      <mime>audio/vnd.wave</mime>
+      <mime>audio/x-aiff</mime>
+      <mime>audio/x-wav</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.asm.ClassParser">
+      <mime>application/java-vm</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.apple.PListParser">
+      <mime>application/x-bplist</mime>
+      <mime>application/x-bplist-itunes</mime>
+      <mime>application/x-bplist-memgraph</mime>
+      <mime>application/x-bplist-webarchive</mime>
+      <mime>application/x-plist</mime>
+    </parser>
+    <parser class="org.apache.tika.parser.apple.AppleSingleFileParser">
+      <mime>application/applefile</mime>
+    </parser>
+    <parser class="org.gagravarr.tika.VorbisParser">
+      <mime>audio/vorbis</mime>
+    </parser>
+    <parser class="org.gagravarr.tika.TheoraParser">
+      <mime>video/theora</mime>
+    </parser>
+    <parser class="org.gagravarr.tika.SpeexParser">
+      <mime>audio/ogg; codecs=speex</mime>
+      <mime>audio/speex</mime>
+    </parser>
+    <parser class="org.gagravarr.tika.OpusParser">
+      <mime>audio/ogg; codecs=opus</mime>
+      <mime>audio/opus</mime>
+    </parser>
+    <parser class="org.gagravarr.tika.OggParser">
+      <mime>application/kate</mime>
+      <mime>application/ogg</mime>
+      <mime>audio/ogg</mime>
+      <mime>audio/x-oggpcm</mime>
+      <mime>video/daala</mime>
+      <mime>video/ogg</mime>
+      <mime>video/x-dirac</mime>
+      <mime>video/x-oggrgb</mime>
+      <mime>video/x-ogguvs</mime>
+      <mime>video/x-oggyuv</mime>
+      <mime>video/x-ogm</mime>
+    </parser>
+    <parser class="org.gagravarr.tika.FlacParser">
+      <mime>audio/x-flac</mime>
+      <mime>audio/x-oggflac</mime>
+    </parser>
+  </parsers>
+</properties>

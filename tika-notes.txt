@@ -1,0 +1,73 @@
+The assumptions made by the install are as follows:
+
+  - Fedora 42 (or similar)
+
+  - All AI stuff (ollama, open-webui, comfyui, tika) is owned by user 'ollama' and group 'ai'
+
+  - You don't want anything to do with containers or overly complex build systems
+  - You kinda like putting third party stuff in /opt
+
+----------------------------------------------------------------------
+* Download tika:
+	https://tika.apache.org/download.html
+	- tika-server-standard-3.2.3.jar
+	- tika-app-3.2.3.jar 
+	- tika-parser-scientific-package-3.2.3.jar (scientific parsers, PGP signature, SHA512)
+	- tika-parser-nlp-package-3.2.3.jar (nlp parser, PGP signature, SHA512)
+	- tika-parser-sqlite3-package-3.2.3.jar (sqlite3 parser, PGP signature, SHA512)
+  Place all of these in /opt/tika and chown -R ollama:ai /opt/tika
+  Make version-independent symlinks for use elsewhere:
+	- sudo ln -s /opt/tika/tika-server-standard-3.2.3.jar /opt/tika/tika-server-standard.jar
+  	- sudo ln -s /opt/tika/tika-app-3.2.3.jar /opt/tika/tika-app.ja
+
+----------------------------------------------------------------------
+* Modify tika-config.xml
+  Things you probably want to change (<server> section up top):
+	- <port>9997</port
+	- <host>localhost</host>
+	- <javaPath>/usr/bin/java</javaPath>	
+  Put in /opt/tika and chown it as above.
+  This files was constructed as follows:
+	- java -jar /opt/tika/tika-app.jar --dump-static-full-config
+	- unzip -l /opt/tika/tika-server-standard.jar | grep fetcher | grep class
+	- manually add <fetcher> tags for likely classes (FileSystemFetcher and UrlFetcher)
+
+----------------------------------------------------------------------
+* Modify tika.service
+  Things you probably want to change:
+	- User=ollama
+	- Group=ai
+  	- Environment=PATH="/opt/tika:$PATH" JAVA_HOME="/usr/lib/jvm/java-21-openjdk" JRE_HOME="/usr/lib/jvm/jre" CLASSPATH="/opt/tika:$JAVA_HOME/lib:$JRE_HOME/lib
+  Put in /etc/systemd/system/
+
+----------------------------------------------------------------------
+* Modify tika-app
+  Things you probably want to change:
+	- export JAVA_HOME="/usr/lib/jvm/java-21-openjdk"
+	- export JRE_HOME="/usr/lib/jvm/jre"
+	- export CLASSPATH="/opt/tika:$JAVA_HOME/lib:$JRE_HOME/jre/lib"
+	- references to /opt/tika
+  Put in /usr/local/bin and chown a+rx 
+
+----------------------------------------------------------------------
+* Test tika:
+	* helps to have 'sudo journalctl -f' open in a spare terminal
+	* sudo service tika start
+	* curl -X PUT --data-binary "@/tmp/the-prussian-war.pdf" http://localhost:9997/tika  --header "Content-type: application/pdf"
+	* java -jar /opt/tika/tika-app.jar  --config=/opt/tika/tika-config.xml /tmp/the-prussian-war.pdf
+	* tika-app -m /tmp/the-prussian-war.pdf
+	* tika-app -d /tmp/the-prussian-war.pdf
+	* tika-app -A /tmp/the-prussian-war.pdf
+	* sudo service tika stop
+
+----------------------------------------------------------------------
+* Configure open-webui
+	- go to Admin Settings -> Documents
+	- set Content Extraction Engine to Tika
+	- Set Tika URL to http://localhost:9997 (or whatever was used above)
+	- Ensure Bypass Embedding and Retrieval is not selected
+	- Set Text Splitter to "Token (Tiktoken)"
+	- Set Embedding Model Engine to "Default (Sentence Transformers)"
+
+  Test by uploading a document in a new chat and asking a question, e.g.
+  "What is the view of Bazaine in this document? How is the battle of Mars-la-Tour covered?"
