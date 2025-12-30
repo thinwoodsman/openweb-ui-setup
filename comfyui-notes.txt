@@ -1,0 +1,40 @@
+
+----------------------------------------------------------------------
+* Get ComfyUI working. Seriously, this is too much trouble to detail here. Just go do it.
+
+----------------------------------------------------------------------
+* Open the included workflow (sdxl-basic-image-generation-api.json) and ensure that it works, keeping an eye out for the following:
+  - this uses and SDXL base and refiner model, which are assumed to be stored in ComfyUI/models/checkpoints/SDXL/ 
+	ComfyUI/models/checkpoints/SDXL/sd_xl_base_1.0.safetensors
+	ComfyUI/models/checkpoints/SDXL/sd_xl_refiner_1.0.safetensors
+  - sd_xl_base_1.0.safetensors from https://huggingface.co/stabilityai/stable-diffusion-xl-base-1.0/tree/main
+  - sd_xl_refiner_1.0.safetensors from https://huggingface.co/stabilityai/stable-diffusion-xl-refiner-1.0/tree/main
+  - The nodes in the workflow are all included with ComfyUI, and this workflow is one of their templates. It should just work for Stable Diffusion checkpoints.
+
+----------------------------------------------------------------------
+* Configure open-webui
+
+        - go to Admin Settings -> Images
+	- enable Image Genertion
+	- set Image Generation Engine to ComfyUI
+	- set ComfyUI Base URL to your local ComfyUI URL (e.g. http://localhost:8188)
+	- SAVE
+	- Upload the workflow file you tested above
+	  * Don't worry if it doesn't seem to do anything - you can verify it was added in a terminal, see sqlite-json-notes.txt *
+        - Set "Prompt" node (text) to 6
+	- Set "Model" node (ckpt_name) to 4
+	- Set "Width" node to 5
+	- Set "Height" node to 5
+	- Set "Steps" node to 10
+	- Set "Seed" node to 10
+	- SAVE
+	- Set "Model" to "SDXL/sd_xl_base_1.0.safetensors" or another
+          SDXL model you like (e.g. zaxiousXL_v40.safetensors)
+	
+  Test by asking a model to generate a prompt:
+	"Generate a prompt for generating an image of Bazaine, coffee cup in one trembling hand and half-eaten croissant in another, as he realizes the Prussians are interrupting his breakfast."
+  Depending on the model, this will generate an image, or a prompt suggestion. If a prompt, edit the response to clean it up, and press the image icon in the response edit toolbox, or whatever it's called. The image icon will also regenerate the image.
+
+----------------------------------------------------------------------
+TODO:
+  * open-webui needs to be told that "seed" is named "noise_seed" in Comfyui.
