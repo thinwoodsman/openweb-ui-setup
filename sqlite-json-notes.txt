@@ -1,0 +1,49 @@
+
+How to clear the ComfyUI "workflow" field of the open-webui config table
+row. The JSON for the config file is in the "data" column of the only
+row in this table.
+
+* find the database
+  - assuming you have open-webui installed in the venv ".open-webui-venv":
+    find .open-webui-venv -name '*.db'
+  - should show ".open-webui-venv/lib/python3.11/site-packages/open_webui/data/webui.db"
+
+* open the database in SQLite (dnf install sqlite):
+  sqlite3 .open-webui-venv/lib/python3.11/site-packages/open_webui/data/webui.db
+
+* display the database schema, for good luck:
+  sqlite> .schema
+
+* display the config table definition:
+  sqlite> .schema config
+
+* display the contents of the config table:
+  sqlite> select * from config;
+
+* display the image_generation field of the JSON in the data column of config table:
+  sqlite> select id, json_extract(data, '$.image_generation')  from config;
+
+* display the comyfui field of the image_generation section of the JSON:
+  sqlite> select id, json_extract(data, '$.image_generation.comfyui')  from config;
+
+* display the workflow field of the comfyui section:
+  sqlite> select id, json_extract(data, '$.image_generation.comfyui.workflow')  from config;
+
+* clear the workflow field [this clears the setting: use if there is a problem]
+  sqlite> update config set data= json_set(data, '$.image_generation.comfyui.workflow', '');
+
+* display the workflow field of the comfyui section again to verify
+
+Some other things that may need fixing while you're there:
+
+* Set automatic1111 auth to a string value to fix a bug in open-webui:
+  sqlite> update config set data= json_set(data, '$.image_generation.automatic1111.api_auth', '');
+
+* Set the image size, just for practice:
+  sqlite> update config set data= json_set(data, '$.image_generation.size', '512x512');
+
+* Clear the model name, because grog only knows what nonsense you set it to:
+  sqlite> update config set data= json_set(data, '$.image_generation.model', '');
+
+
+Exit Sqlite with ".quit". All changes have already been written. 
