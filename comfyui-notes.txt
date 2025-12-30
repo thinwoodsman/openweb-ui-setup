@@ -15,7 +15,7 @@
 * Configure open-webui
 
         - go to Admin Settings -> Images
-	- enable Image Genertion
+	- enable Image Generation
 	- set Image Generation Engine to ComfyUI
 	- set ComfyUI Base URL to your local ComfyUI URL (e.g. http://localhost:8188)
 	- SAVE
@@ -35,3 +35,33 @@
 	"Generate a prompt for generating an image of Bazaine, coffee cup in one trembling hand and half-eaten croissant in another, as he realizes the Prussians are interrupting his breakfast."
   Depending on the model, this will generate an image, or a prompt suggestion. If a prompt, edit the response to clean it up, and press the image icon in the response edit toolbox, or whatever it's called. The image icon will also regenerate the image.
 
+----------------------------------------------------------------------
+* Image editing
+  Download the QWEN-Image models and image-edit workflow as directed here:
+    https://comfyanonymous.github.io/ComfyUI_examples/qwen_image/
+	- qwen_image_fp8_e4m3fn.safetensors
+	- qwen_2.5_vl_7b_fp8_scaled.safetensors 
+	- qwen_image_vae.safetensors 
+	- qwen_image_edit_2509_fp8_e4m3fn.safetensors 
+  Put these models in ComfyUI/models/checkpoints/QWEN
+  Symlink from diffusion into checkpoints:
+  	ln -s ComfyUI/models/checkpoints/QWEN ComfyUI/models/diffusion_models/QWEN
+  Save the PNG for the image-edit workflow, open it in ComfyUI (File->Open),
+  and test the workflow. 
+  Export the API workflow as qwen-basic-image-edit.api.json , or use the
+  one included in this repo.
+
+----------------------------------------------------------------------
+* Configure open-webui
+        - go to Admin Settings -> Images
+	- set Image Edit Engine to ComfyUI
+	- set ComfyUI Base URL to your local ComfyUI URL (e.g. http://localhost:8188)
+	- SAVE
+	- Upload the workflow file you tested above (qwen-basic-image-edit.api.json)
+        - Set "Image" node to 41
+        - Set "Prompt" node (prompt) to 69
+	- Set "Model" node (unet_name) to 12
+	- Set "Width" node to 66
+	- Set "Height" node to 66
+	- SAVE
+	- Set "Model" to "Qwen/qwen_image_edit_2509_fp8_e4m3fn.safetensors"
