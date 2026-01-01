@@ -6,7 +6,6 @@
     <port>9997</port>
     <host>localhost</host>
     <javaPath>/usr/bin/java</javaPath>
-    <enableUnsecureFeatures>true</enableUnsecureFeatures>
   </server>
   <encodingDetectors>
     <encodingDetector class="org.apache.tika.parser.html.HtmlEncodingDetector">
@@ -29,7 +28,11 @@
   </encodingDetectors>
   <fetchers>
     <fetcher class="org.apache.tika.pipes.fetcher.EmptyFetcher"/>
-    <fetcher class="org.apache.tika.pipes.fetcher.fs.FileSystemFetcher"/>
+    <fetcher class="org.apache.tika.pipes.fetcher.fs.FileSystemFetcher">
+    <params>
+        <basePath>/home/tika</basePath>
+      </params>
+    </fetcher>
     <fetcher class="org.apache.tika.pipes.fetcher.url.UrlFetcher"/>
   </fetchers>
   <!--No translators available-->
